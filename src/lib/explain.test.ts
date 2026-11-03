@@ -102,8 +102,10 @@ describe('column method', () => {
   });
 });
 
-describe('every question, both styles', () => {
-  const quizzes = LEVELS.flatMap((l) => Array.from({ length: 40 }, (_, seed) => generateQuiz({ level: l.id, count: 15, seed: seed + 1 }))).flat();
+// Keep all 40 seeds and 15 questions per level, but give each level its own
+// test boundary so the complete column-method sweep does not time out on CI.
+describe.each(LEVELS)('every question at level $id, both styles', ({ id }) => {
+  const quizzes = Array.from({ length: 40 }, (_, seed) => generateQuiz({ level: id, count: 15, seed: seed + 1 })).flat();
 
   it('ends on the answer', () => {
     for (const q of quizzes) {

@@ -2,7 +2,8 @@
 
 验证日期：2026-11-03。
 
-- `npm test`：6 个测试文件、148 项测试通过，包括原有算式、讲解、多语言与语言切换回归。
+- `npm test`：6 个测试文件、193 项测试通过，包括原有算式、讲解、多语言与语言切换回归。
+- 三类讲解全量检查按 16 个关卡分别运行；每关保留 40 个固定种子、每个种子 15 题的全部原有校验，避免将所有关卡放在一个测试中导致云端偶发超过 5 秒限制。
 - `npm run build`：TypeScript 检查及 Vite 生产构建通过，产物在 `dist/`。
 - 新增生成测试覆盖三个加数的边界、20/27 上限、乘数 1–9、两位数不进位/进位约束、固定种子复现、两个新关卡之间的升级。
 - 新增组件测试核对旧存档补充新模式时保留原进度；三页连加练习纸的每一道题均显示三个加数，答案页与加数之和一致。
@@ -13,4 +14,6 @@
 
 运行说明：本机 Node 25.5.0 安装依赖时，Vitest 声明的 Node 版本范围会产生引擎提示；上述测试及生产构建实际执行通过。新环境建议使用 README 中列出的受支持 Node LTS。
 
-本文件记录本地运行与静态构建验证；线上发布结果以 GitHub Actions 和实际网站访问为准。实体打印机输出未验证。
+GitHub Pages 地址：[https://assilzm.github.io/bunny-math/](https://assilzm.github.io/bunny-math/)。经用户授权，已移除旧个人主页的 `www.assilzm.com` 绑定及其 `CNAME` 配置。正式地址返回 200、无域名跳转，线上首页及连加答题判定已验证，浏览器无错误或警告；Pages 状态已启用 HTTPS。
+
+曾访问过旧地址的浏览器可能缓存了永久跳转，可使用 [带版本参数的入口](https://assilzm.github.io/bunny-math/?v=20261103) 绕开旧缓存。最新云端发布结果见[GitHub Actions](https://github.com/assilzm/bunny-math/actions/workflows/deploy.yml)。实体打印机输出未验证。
