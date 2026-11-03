@@ -1,6 +1,12 @@
 # 小兔数学 · 一年级专项练习
 
-基于 [binarydevil/bunny-math](https://github.com/binarydevil/bunny-math) 扩展，参考[原网站](https://binarydevil.github.io/bunny-math/)。项目在本机独立目录运行，Git 的 origin 保留原仓库地址，没有向原仓库推送或部署。
+基于 [binarydevil/bunny-math](https://github.com/binarydevil/bunny-math) 扩展，参考[原网站](https://binarydevil.github.io/bunny-math/)。发布仓库为 [assilzm/bunny-math](https://github.com/assilzm/bunny-math)，网站地址为 [https://assilzm.github.io/bunny-math/](https://assilzm.github.io/bunny-math/)。本地 `origin` 指向发布仓库，原项目保留为 `upstream`。
+
+## GitHub Pages 发布
+
+仓库 Settings → Pages 的 Source 使用 **GitHub Actions**。推送到 `main` 或在 Actions 手动运行 **Deploy to GitHub Pages** 后，会依次安装依赖、运行测试、生产构建并发布 `dist/`。
+
+日常修改并完成测试后，提交代码并执行 `git push origin main` 即可更新网站。发布结果见[仓库 Actions](https://github.com/assilzm/bunny-math/actions/workflows/deploy.yml)。
 
 ## 新增练习
 
