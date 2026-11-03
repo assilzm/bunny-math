@@ -1,3 +1,45 @@
+# 小兔数学 · 一年级专项练习
+
+基于 [binarydevil/bunny-math](https://github.com/binarydevil/bunny-math) 扩展，参考[原网站](https://binarydevil.github.io/bunny-math/)。项目在本机独立目录运行，Git 的 origin 保留原仓库地址，没有向原仓库推送或部署。
+
+## 新增练习
+
+| 专项 | 难度 | 规则 |
+| --- | --- | --- |
+| 三个一位数连加 | 20 以内 / 挑战 27 | 三个 0–9 的数相加，完整显示三个加数，分两步讲解 |
+| 乘法口诀验证 | 一到五口诀 / 完整九九表 | 一个乘数 1–5 或 1–9，另一个 1–9；填写积后校验；作答后和讲解中展示中文口诀 |
+| 两位数加法 | 不进位 / 进位 | 两个加数均为两位数，得数不超过 99；进位档每题都需要个位进位 |
+
+原有加减乘除、五种题目形式、积木和竖式讲解、错题复练、星星和贴纸、本地进度、多语言、打印练习纸及答案页均保留。新增专项可选择 10、15、20 题，也可打印多页。乘法属于拓展练习，家长可按学习进度选用。
+
+## 本地启动
+
+需要 Node.js 22.x（≥22.12）、24 LTS 或 26+（与原项目 Vitest 引擎约束一致，建议使用 LTS）。项目使用 `.npmrc` 指向 npm 官方源，不改全局 npm 设置。
+
+```text
+npm ci
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+浏览器访问 `http://127.0.0.1:5173`。或者在 Windows 上运行：
+
+```text
+pwsh -NoLogo -NoProfile -File scripts/start-preview.ps1
+```
+
+该脚本在后台启动本机预览并输出进程 PID；日志在 `.preview.log` / `.preview-error.log`，端口占用时不会自动切换端口。
+
+```text
+npm test
+npm run build
+```
+
+构建结果在 `dist/`，可以放到静态网站服务器。页面不需要账号或业务后端，进度仅保存在当前浏览器；首次运行跟随浏览器语言，可在右上角切换。新增文案支持简体中文、繁体中文、英文，其余原有语言的新增部分回退英文。
+
+设计说明见 [DESIGN.md](DESIGN.md)。下文保留上游项目说明。
+
+---
+
 # Bunny Math 🐰
 
 Cute maths practice for kids around 8: adding and taking away, or all four operations. It runs entirely in the browser: no accounts, no server, and progress is saved on the device.

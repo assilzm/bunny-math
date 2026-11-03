@@ -1,5 +1,6 @@
 import { list, t, tn } from '../i18n';
-import { compareSign, digit, opSymbol } from './generator';
+import { compareSign, digit, factExpression, opSymbol, tableMnemonic } from './generator';
+import { getLang } from '../i18n';
 import type { ExplainStyle } from './storage';
 import type { Fact, Question } from './types';
 
@@ -418,6 +419,17 @@ const BUILDERS: Record<ExplainStyle, Record<Fact['op'], (f: Fact) => Step[]>> = 
 };
 
 export function factSteps(f: Fact, style: ExplainStyle = 'blocks'): Step[] {
+  if (f.extra !== undefined) {
+    const { a, b, extra, c: total } = f;
+    const sum = a + b;
+    return [
+      { scene: { type: 'blocks', parts: [group(a, 'a'), '+', group(b, 'b'), '+', group(extra, 'new')] }, caption: t('grade.chainFirst', { a, b, sum }) },
+      ...factSteps({ a, op: '+', b, c: sum }, style),
+      { scene: { type: 'text', lines: [`${sum} + ${extra} = ${total}`] }, caption: t('grade.chainNext', { sum, extra, total }) },
+      ...factSteps({ a: sum, op: '+', b: extra, c: total }, style),
+      { scene: { type: 'text', lines: [`${factExpression(f)} = ${total}`] }, caption: t('grade.chainDone', { a, b, extra, total }) },
+    ];
+  }
   return BUILDERS[style][f.op](f);
 }
 
@@ -441,7 +453,7 @@ export function questionText(q: Question): string {
   const { a, op, b, c } = q.fact;
   const s = sym(op);
   if (q.kind === 'missing') return q.hide === 'a' ? `? ${s} ${b} = ${c}` : `${a} ${s} ? = ${c}`;
-  return `${a} ${s} ${b}`;
+  return factExpression(q.fact);
 }
 
 export function explain(q: Question, style: ExplainStyle = 'blocks'): Step[] {
@@ -459,6 +471,10 @@ export function explain(q: Question, style: ExplainStyle = 'blocks'): Step[] {
     ];
   }
   const steps = factSteps(q.fact, style);
+  if (q.tablePractice) steps.push({
+    scene: { type: 'text', lines: [`${factExpression(q.fact)} = ${q.fact.c}`] },
+    caption: t('grade.mnemonic', { fact: getLang().startsWith('zh') ? tableMnemonic(q.fact) : `${factExpression(q.fact)} = ${q.fact.c}` }),
+  });
   if (q.kind === 'compare') {
     const sign = compareSign(q.fact.c, q.than);
     const key = ({ '<': 'ex.smaller', '>': 'ex.bigger', '=': 'ex.same' } as const)[sign];

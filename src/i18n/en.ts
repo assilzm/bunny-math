@@ -6,7 +6,9 @@
  * - `*stars*` mark highlighted words in the "Show me how" captions.
  * - `_one` / `_other` pairs are plurals; languages without plurals use the same text for both.
  */
+import { gradeEn } from './grade';
 export const en = {
+  ...gradeEn,
   // App
   'app.name': 'Bunny Math',
   /** The home title is drawn as two wobbly words. */

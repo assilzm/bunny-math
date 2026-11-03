@@ -4,7 +4,9 @@ import type { Messages } from './en';
  * Korean particles (은/는, 이/가, 을/를) depend on how the word before them ends,
  * so sentences avoid putting a particle straight after a {number}.
  */
+import { gradeEn } from './grade';
 export const ko: Messages = {
+  ...gradeEn,
   'app.name': '토끼 수학',
   'app.nameA': '토끼',
   'app.nameB': '수학',

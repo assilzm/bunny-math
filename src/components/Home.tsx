@@ -1,5 +1,5 @@
 import { tn, useT, type Lang } from '../i18n';
-import { levelsFor, MODES } from '../lib/generator';
+import { levelOf, levelsFor, MODES } from '../lib/generator';
 import { sounds } from '../lib/sound';
 import type { Saved } from '../lib/storage';
 import type { LevelId, Mode } from '../lib/types';
@@ -58,6 +58,7 @@ export function Home({ saved, mode, level, lang, onLang, onLevel, onMode, onChan
         <div class="hero">
           <Bunny mood="happy" />
           <div>
+            <p class="grade-badge">{t('grade.badge')}</p>
             <h1 class="title">
               <span>{t('app.nameA')}</span> <span>{t('app.nameB')}</span>
             </h1>
@@ -65,6 +66,10 @@ export function Home({ saved, mode, level, lang, onLang, onLevel, onMode, onChan
           </div>
         </div>
         <div class="home-pick">
+          <div class="practice-heading">
+            <p class="section-label">{t('grade.ready')}</p>
+            <h2>{t(`mode.${mode}.name`)}</h2>
+          </div>
           <div class={`levels n${levels.length}`} role="radiogroup" aria-label={t('home.level')}>
             {levels.map((l) => (
               <button key={l.id} class="level" role="radio" aria-checked={level === l.id}
@@ -82,6 +87,7 @@ export function Home({ saved, mode, level, lang, onLang, onLevel, onMode, onChan
               </button>
             ))}
           </div>
+          <p class="level-description">{t(`level.${levelOf(level).id}.blurb`)}</p>
           <div class="length">
             <span id="len-label">{t('home.questions')}</span>
             <div class="seg" role="radiogroup" aria-labelledby="len-label">

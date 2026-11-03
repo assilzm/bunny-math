@@ -1,16 +1,16 @@
 export type Op = '+' | '-' | '×' | '÷';
 
 /** Which operations the child practices: adding and taking away, or all four. */
-export type Mode = 'plus' | 'all';
+export type Mode = 'plus' | 'all' | 'chain' | 'tables' | 'double';
 
 /** Levels 1–6 are in the "plus" mode, 11–14 in the "all four" mode. */
-export type LevelId = 1 | 2 | 3 | 4 | 5 | 6 | 11 | 12 | 13 | 14;
+export type LevelId = 1 | 2 | 3 | 4 | 5 | 6 | 11 | 12 | 13 | 14 | 21 | 22 | 31 | 32 | 41 | 42;
 
 /** What a question practices. Used for the "how you did" summary. */
 export type Skill = 'add20' | 'sub20' | 'add' | 'sub' | 'carry' | 'borrow' | 'times' | 'divide';
 
 /** The underlying sum, e.g. 38 + 7 = 45. */
-export type Fact = { a: number; op: Op; b: number; c: number };
+export type Fact = { a: number; op: Op; b: number; c: number; extra?: number };
 
 /** Which picture story a question tells. The words live in the translations: `story.<id>.text` and `story.<id>.ask`. */
 export type StoryId =
@@ -25,6 +25,8 @@ export type Question = {
   id: string;
   fact: Fact;
   skill: Skill;
+  /** A dedicated 1–9 times-table exercise, with a mnemonic after answering. */
+  tablePractice?: boolean;
 } & (
   | { kind: 'type' }
   | { kind: 'story'; story: Story }

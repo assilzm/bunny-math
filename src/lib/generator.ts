@@ -6,11 +6,20 @@ export type Level = { id: LevelId; mode: Mode; example: string };
 
 /** Mode names and blurbs are translated: `mode.<mode>.name` and `mode.<mode>.blurb`. */
 export const MODES: Record<Mode, { signs: string }> = {
+  chain: { signs: '+ + +' },
+  tables: { signs: '×' },
+  double: { signs: '10 +' },
   plus: { signs: '+ −' },
   all: { signs: '+ − × ÷' },
 };
 
 export const LEVELS: readonly Level[] = [
+  { id: 21, mode: 'chain', example: '3 + 5 + 7' },
+  { id: 22, mode: 'chain', example: '8 + 9 + 6' },
+  { id: 31, mode: 'tables', example: '3 × 4' },
+  { id: 32, mode: 'tables', example: '7 × 8' },
+  { id: 41, mode: 'double', example: '23 + 14' },
+  { id: 42, mode: 'double', example: '38 + 27' },
   { id: 1, mode: 'plus', example: '7 + 8' },
   { id: 2, mode: 'plus', example: '34 + 5' },
   { id: 3, mode: 'plus', example: '38 + 7' },
@@ -32,7 +41,7 @@ export function nextLevel(id: LevelId): LevelId | null {
 }
 
 /** In "all four", two thirds of the questions are times or divide. */
-const OPS: Record<Mode, Op[]> = { plus: ['+', '-'], all: ['×', '÷', '+', '×', '÷', '-'] };
+const OPS: Record<Mode, Op[]> = { plus: ['+', '-'], all: ['×', '÷', '+', '×', '÷', '-'], chain: ['+'], tables: ['×'], double: ['+'] };
 export const opsFor = (level: LevelId) => OPS[levelOf(level).mode];
 
 /** Skill names are translated: `skill.<skill>`. */
@@ -56,11 +65,11 @@ const mul = (a: number, b: number): Fact => ({ a, op: '×', b, c: a * b });
 const div = (a: number, b: number): Fact => ({ a, op: '÷', b, c: a / b });
 
 /** How many columns need carrying (adding) or borrowing (taking away). */
-export function regroupCount({ a, op, b }: Fact): number {
+export function regroupCount({ a, op, b, extra: third = 0 }: Fact): number {
   let n = 0;
   let extra = 0;
   for (let p = 0; p < 3; p++) {
-    if (op === '+') extra = digit(a, p) + digit(b, p) + extra >= 10 ? 1 : 0;
+    if (op === '+') extra = digit(a, p) + digit(b, p) + digit(third, p) + extra >= 10 ? 1 : 0;
     else if (op === '-') extra = digit(a, p) - extra < digit(b, p) ? 1 : 0;
     else return 0;
     n += extra;
@@ -219,6 +228,12 @@ const plusOnly =
     pm(r, op === '-' || op === '÷' ? '-' : '+');
 
 const BY_LEVEL: Record<LevelId, Gen> = {
+  21: (r) => chainFact(r, 20),
+  22: (r) => chainFact(r, 27),
+  31: (r) => mul(r.int(1, 5), r.int(1, 9)),
+  32: (r) => mul(r.int(1, 9), r.int(1, 9)),
+  41: (r) => doubleFact(r, false),
+  42: (r) => doubleFact(r, true),
   1: plusOnly(level1),
   2: plusOnly(level2),
   3: plusOnly(level3),
@@ -233,6 +248,38 @@ const BY_LEVEL: Record<LevelId, Gen> = {
 
 export function makeFact(r: Rng, level: LevelId, op: Op = r.pick(opsFor(level))): Fact {
   return BY_LEVEL[level](r, op);
+}
+
+function chainFact(r: Rng, max: number): Fact {
+  const a = r.int(0, 9);
+  const b = r.int(0, 9);
+  const extra = r.int(0, Math.min(9, max - a - b));
+  return { a, op: '+', b, extra, c: a + b + extra };
+}
+
+const DOUBLE_FACTS = new Map<boolean, Fact[]>();
+function doubleFact(r: Rng, carry: boolean): Fact {
+  const cached = DOUBLE_FACTS.get(carry);
+  if (cached) return r.pick(cached);
+  // Enumerate the small finite domain: bounded work and exact difficulty guarantees.
+  const pairs: Fact[] = [];
+  for (let a = 10; a <= 89; a++) {
+    for (let b = 10; b <= 99 - a; b++) {
+      if ((ones(a) + ones(b) >= 10) === carry) pairs.push(add(a, b));
+    }
+  }
+  DOUBLE_FACTS.set(carry, pairs);
+  return r.pick(pairs);
+}
+
+export const factExpression = (f: Fact) => `${f.a} ${opSymbol(f.op)} ${f.b}${f.extra === undefined ? '' : ` + ${f.extra}`}`;
+
+/** The traditional 45 Chinese multiplication mnemonics, including 一一得一. */
+export function tableMnemonic(f: Fact): string {
+  const nums = '零一二三四五六七八九';
+  const a = Math.min(f.a, f.b), b = Math.max(f.a, f.b), c = f.a * f.b;
+  const result = c < 10 ? `得${nums[c]}` : c === 10 ? '一十' : c < 20 ? `十${nums[c % 10]}` : `${nums[Math.floor(c / 10)]}十${c % 10 ? nums[c % 10] : ''}`;
+  return `${nums[a]}${nums[b]}${result}`;
 }
 
 /* ---------- Question formats ---------- */
@@ -367,16 +414,19 @@ export function generateQuiz({ level, count, seed, skills, kinds }: QuizOptions)
   for (let i = 0; i < count; i++) {
     let fact = makeFact(r, level, ops[i]);
     for (let tries = 0; tries < 200; tries++) {
-      const key = `${fact.a}${fact.op}${fact.b}`;
+      const key = factExpression(fact);
       const skillOk = !skills?.length || skills.includes(skillOf(fact, level));
       if (!seen.has(key) && skillOk) break;
       fact = makeFact(r, level, skills?.length ? undefined : ops[i]);
     }
-    seen.add(`${fact.a}${fact.op}${fact.b}`);
+    seen.add(factExpression(fact));
     // Ease in: the first two questions are always plain sums.
     let kind = i < 2 ? 'type' : pickKind(r);
     if (kinds && !kinds.includes(kind)) kind = r.pick(kinds);
-    out.push(makeQuestion(r, `q${i + 1}`, fact, skillOf(fact, level), kind));
+    // Three operands require a dedicated prompt; two-operand stories/missing-number
+    // formats would silently omit the third addend. Times-table checks ask for products.
+    if (fact.extra !== undefined || levelOf(level).mode === 'tables') kind = 'type';
+    out.push({ ...makeQuestion(r, `q${i + 1}`, fact, skillOf(fact, level), kind), tablePractice: levelOf(level).mode === 'tables' });
   }
   return out;
 }

@@ -1,7 +1,9 @@
 import type { Messages } from './en';
 
 /** Write a normal space before ! ? : ; — t() turns it into a non-breaking one. */
+import { gradeEn } from './grade';
 export const fr: Messages = {
+  ...gradeEn,
   'app.name': 'Bunny Math',
   'app.nameA': 'Bunny',
   'app.nameB': 'Math',

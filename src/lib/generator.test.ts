@@ -5,7 +5,8 @@ import type { LevelId, Op } from './types';
 
 const SEEDS = Array.from({ length: 300 }, (_, i) => i * 7919 + 1);
 
-const ALL_LEVELS = LEVELS.map((l) => l.id);
+// These checks cover the original levels; year-one domains (including zero) have their own suite.
+const ALL_LEVELS = LEVELS.filter((l) => l.id < 20).map((l) => l.id);
 
 function facts(level: LevelId, ops: Op[] = ['+', '-']) {
   return SEEDS.flatMap((seed) => {

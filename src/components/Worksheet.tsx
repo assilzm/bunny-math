@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'preact/hooks';
 import { t, useT } from '../i18n';
-import { compareSign, correctAnswer, generateQuiz, levelOf, opSymbol } from '../lib/generator';
+import { compareSign, correctAnswer, factExpression, generateQuiz, levelOf, opSymbol } from '../lib/generator';
 import { randomSeed } from '../lib/rng';
 import type { LevelId, Question } from '../lib/types';
 
@@ -42,7 +42,7 @@ function PrintedQuestion({ q }: { q: Question }) {
     default:
       return (
         <span>
-          {a} {s} {b} = <Box />
+          {factExpression(q.fact)} = <Box />
         </span>
       );
   }

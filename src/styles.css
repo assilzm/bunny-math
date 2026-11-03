@@ -647,6 +647,74 @@ h1, h2, p { margin: 0; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
+/* ---------- Year-one practice hub: the original notebook palette ---------- */
+.wordmark { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 22px; letter-spacing: -1px; }
+.wordmark-dot { width: 10px; height: 10px; background: var(--berry); border-radius: 50%; }
+.grade-badge { color: var(--ink-soft); font-size: 14px; font-weight: 800; letter-spacing: .12em; margin-bottom: 14px; }
+.mode-screen { height: auto; min-height: 100dvh; overflow: visible; padding: 24px clamp(20px, 5vw, 80px) 36px; }
+.mode-screen .topbar { width: 100%; max-width: 1180px; margin: 0 auto; }
+.mode-screen .mode-body { width: 100%; max-width: 1180px; margin: 32px auto 0; gap: 24px; }
+.mode-screen .mode-hero { align-self: flex-start; gap: 28px; margin: 8px 0 12px; }
+.mode-screen .mode-hero .bunny { width: 132px; }
+.mode-screen .mode-title { font-size: clamp(32px, 3.8vw, 52px); line-height: 1.3; }
+.mode-intro { color: var(--ink-soft); font-size: 18px; font-weight: 600; margin-top: 12px; text-wrap: pretty; }
+.section-label { align-self: flex-start; font-size: 15px; font-weight: 800; letter-spacing: .05em; color: var(--ink-soft); }
+.mode-screen .modes { width: 100%; grid-template-columns: repeat(6, 1fr); gap: 24px; }
+.mode-screen .mode-card { position: relative; grid-column: span 2; justify-content: center; min-height: 230px; padding: 30px 16px 24px; gap: 10px; text-align: center; box-shadow: 0 6px 0 var(--ink); rotate: 0deg; }
+.mode-screen .mode-card:hover { translate: 0 -4px; box-shadow: 0 10px 0 var(--ink); }
+.mode-screen .mode-card:active { translate: 0 4px; box-shadow: 0 2px 0 var(--ink); }
+.m-chain { background: var(--mint-soft); }
+.m-tables { background: var(--butter-soft); }
+.m-double { background: var(--berry-soft); }
+.new-tag { position: absolute; top: -12px; left: 22px; background: var(--card); border: 2px solid var(--ink); border-radius: 8px; padding: 3px 10px; font-size: 12px; font-weight: 800; rotate: -5deg; }
+.mode-screen .mode-signs { gap: 5px; align-items: center; }
+.mode-screen .mode-signs span { width: auto; min-width: 38px; height: 53px; aspect-ratio: auto; padding: 4px 8px; font-size: 30px; border-width: 2px; border-radius: 12px; }
+.mode-screen .mode-name { font-size: clamp(20px, 2vw, 26px); line-height: 1.4; }
+.mode-screen .mode-blurb { font-size: 15px; font-weight: 600; line-height: 1.65; }
+.mode-screen .m-plus, .mode-screen .m-all { grid-column: span 3; min-height: 130px; padding: 22px 24px; display: grid; grid-template-columns: auto 1fr; text-align: left; column-gap: 20px; row-gap: 4px; background: var(--card); }
+.mode-screen .m-plus .mode-signs, .mode-screen .m-all .mode-signs { grid-row: span 2; }
+.mode-screen .m-plus .mode-name, .mode-screen .m-all .mode-name { margin: 0; font-size: 22px; }
+.mode-screen .m-plus .mode-signs span, .mode-screen .m-all .mode-signs span { background: var(--lilac-soft); min-width: 30px; height: 42px; font-size: 24px; }
+.mode-footer { color: var(--ink-soft); font-size: 15px; font-weight: 600; margin-top: 4px; text-align: center; }
+.practice-heading { text-align: center; }
+.practice-heading h2 { font-size: clamp(24px, 4dvh, 34px); margin: 6px 0 12px; }
+.level-description { text-align: center; color: var(--ink-soft); font-weight: 600; font-size: 16px; padding: 0 12px; text-wrap: pretty; }
+.table-note { font-size: clamp(16px, 2.5cqi, 22px); font-weight: 700; color: var(--ink-soft); margin-top: 20px; }
+.chain-equation { font-size: clamp(24px, min(10cqi, 11dvh), 88px); gap: .16em; }
+.chain-equation .slot { min-width: 1.5em; }
+@media (max-width: 900px) {
+  .mode-screen .modes { gap: 22px 16px; }
+  .mode-screen .mode-card { min-height: 210px; }
+  .mode-screen .mode-signs span { min-width: 28px; font-size: 25px; height: 46px; padding: 3px 5px; }
+  .mode-screen .m-plus, .mode-screen .m-all { display: flex; min-height: 140px; text-align: center; gap: 6px; }
+}
+@media (max-width: 650px) {
+  .mode-screen { padding: 16px 20px 28px; }
+  .mode-screen .mode-body { margin-top: 24px; gap: 20px; }
+  .mode-screen .mode-hero { gap: 14px; margin: 0 0 4px; }
+  .mode-screen .mode-hero .bunny { width: 74px; }
+  .mode-screen .mode-title { font-size: 27px; }
+  .grade-badge { font-size: 11px; letter-spacing: .05em; margin-bottom: 8px; }
+  .mode-intro { font-size: 14px; margin-top: 8px; }
+  .mode-screen .modes { grid-template-columns: 1fr 1fr; gap: 20px 12px; }
+  .mode-screen .mode-card { grid-column: span 2; min-height: 140px; display: grid; grid-template-columns: 1fr 1fr; padding: 20px 16px; gap: 4px 10px; text-align: left; }
+  .mode-screen .mode-signs { grid-row: span 2; justify-content: center; gap: 2px; }
+  .mode-screen .m-chain .mode-signs span { min-width: 22px; padding: 2px 3px; font-size: 21px; height: 38px; }
+  .mode-screen .mode-name { margin: 0; font-size: 20px; }
+  .mode-screen .mode-blurb { font-size: 13px; }
+  .mode-screen .m-plus, .mode-screen .m-all { grid-column: span 1; display: flex; text-align: center; min-height: 160px; padding: 12px 8px; }
+  .mode-screen .m-plus .mode-name, .mode-screen .m-all .mode-name { font-size: 18px; }
+  .mode-screen .m-plus .mode-signs span, .mode-screen .m-all .mode-signs span { min-width: 25px; font-size: 20px; height: 34px; padding: 2px 4px; }
+  .mode-screen .mode-footer { font-size: 13px; }
+  .home-body { overflow-y: auto; padding: 12px 2px 8px; }
+  .levels.n2 .lv-name { font-size: 20px; padding-right: 0; }
+}
+@media (max-width: 360px) {
+  .mode-screen .mode-card { display: flex; text-align: center; }
+  .mode-screen .mode-title { font-size: 23px; }
+  .mode-screen .m-plus, .mode-screen .m-all { grid-column: span 2; min-height: 120px; }
+}
+
 /* ---------- Printable worksheet ---------- */
 .print-screen { height: auto; min-height: 100dvh; overflow: visible; }
 .print-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }

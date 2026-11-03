@@ -1,6 +1,8 @@
 import type { Messages } from './en';
 
+import { gradeZh } from './grade';
 export const zhCN: Messages = {
+  ...gradeZh,
   'app.name': '小兔数学',
   'app.nameA': '小兔',
   'app.nameB': '数学',

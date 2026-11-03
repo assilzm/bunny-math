@@ -145,6 +145,8 @@ describe('every question, both styles', () => {
         if (!s.scene.parts.includes('+') && !g.some((x) => [...(x.flats ?? []), ...x.rods, ...x.cubes].some((p) => p.state === 'gone'))) {
           // A missing-number question is turned around first, so any of its three numbers can show up.
           const ok = q.kind === 'missing' ? [q.fact.a, q.fact.b, q.fact.c] : [q.fact.a, q.fact.c];
+          // Three-addend explanations show both the intermediate sum and final total.
+          if (q.fact.extra !== undefined) ok.push(q.fact.a + q.fact.b, q.fact.a + q.fact.b + q.fact.extra);
           expect(ok).toContain(value(s.scene));
         }
       }

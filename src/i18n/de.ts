@@ -1,6 +1,8 @@
 import type { Messages } from './en';
 
+import { gradeEn } from './grade';
 export const de: Messages = {
+  ...gradeEn,
   'app.name': 'Bunny Math',
   'app.nameA': 'Bunny',
   'app.nameB': 'Math',

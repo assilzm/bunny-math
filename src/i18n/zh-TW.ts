@@ -1,6 +1,8 @@
 import type { Messages } from './en';
 
+import { gradeTw } from './grade';
 export const zhTW: Messages = {
+  ...gradeTw,
   'app.name': '小兔數學',
   'app.nameA': '小兔',
   'app.nameB': '數學',

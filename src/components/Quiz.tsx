@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { t, useT, type MessageKey } from '../i18n';
 import { smallBurst } from '../lib/celebrate';
-import { compareSign, correctAnswer, opSymbol } from '../lib/generator';
+import { compareSign, correctAnswer, factExpression, opSymbol, tableMnemonic } from '../lib/generator';
 import { sounds } from '../lib/sound';
 import type { Answer, CompareSign, Question } from '../lib/types';
 import { Bunny, type Mood } from './Bunny';
@@ -25,7 +25,7 @@ const SIGNS: CompareSign[] = ['<', '=', '>'];
 export function fullFact(q: Question) {
   const { a, op, b, c } = q.fact;
   if (q.kind === 'compare') return `${a} ${opSymbol(op)} ${b} ${compareSign(c, q.than)} ${q.than}`;
-  return `${a} ${opSymbol(op)} ${b} = ${c}`;
+  return `${factExpression(q.fact)} = ${c}`;
 }
 
 function shownAnswer(q: Question) {
@@ -34,6 +34,8 @@ function shownAnswer(q: Question) {
 }
 
 function label(q: Question) {
+  if (q.fact.extra !== undefined) return t('grade.chainPrompt');
+  if (q.tablePractice) return t('grade.tablePrompt');
   switch (q.kind) {
     case 'missing':
       return t('quiz.missing');
@@ -89,10 +91,11 @@ function Prompt({ q, value, status }: { q: Question; value: string; status: Stat
     );
   }
   return (
-    <div class="equation" aria-live="polite">
+    <div class={`equation ${q.fact.extra !== undefined ? 'chain-equation' : ''}`} aria-live="polite">
       <span>{a}</span>
       {o}
       <span>{b}</span>
+      {q.fact.extra !== undefined && <><span class="op">+</span><span>{q.fact.extra}</span></>}
       {eq}
       {slot}
     </div>
@@ -236,6 +239,9 @@ export function Quiz({ questions, onDone, onQuit }: { questions: Question[]; onD
             </Bunny>
             {q.kind !== 'story' && <p class="q-label">{label(q)}</p>}
             <Prompt q={q} value={usesPad ? input : status === 'ask' ? '' : input} status={status} />
+            {q.tablePractice && <p class="table-note">{status === 'right' || status === 'wrong2'
+              ? t('grade.mnemonic', { fact: document.documentElement.lang.startsWith('zh') ? tableMnemonic(q.fact) : `${q.fact.a} × ${q.fact.b} = ${q.fact.c}` })
+              : t('grade.tableHint')}</p>}
             {status === 'ask' && (
               <div class="hint-row">
                 <button class="puffy butter hint-btn" onClick={openHelp}>

@@ -21,7 +21,7 @@ export type Saved = {
 };
 
 const KEY = 'bunny-math:v1';
-const DEFAULTS: Saved = { levelFor: { plus: 1, all: 11 }, explain: 'blocks', length: 15, sound: true, stickers: [], best: {} };
+const DEFAULTS: Saved = { levelFor: { plus: 1, all: 11, chain: 21, tables: 31, double: 41 }, explain: 'blocks', length: 10, sound: true, stickers: [], best: {} };
 
 export function load(): Saved {
   try {
@@ -29,6 +29,8 @@ export function load(): Saved {
     if (!raw) return { ...DEFAULTS };
     const { level, ...rest } = JSON.parse(raw);
     const saved: Saved = { ...DEFAULTS, ...rest };
+    saved.levelFor = { ...DEFAULTS.levelFor, ...rest.levelFor };
+    if (saved.mode && !(saved.mode in DEFAULTS.levelFor)) delete saved.mode;
     // Saves from before modes existed kept a single add/take-away level.
     if (typeof level === 'number' && !rest.levelFor) saved.levelFor = { ...DEFAULTS.levelFor, plus: level as LevelId };
     // A language that is no longer offered falls back to the browser's language.

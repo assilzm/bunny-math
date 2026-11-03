@@ -1,7 +1,9 @@
 import type { Messages } from './en';
 
 /** Mostly hiragana with spaces between phrases, as in early-grade Japanese books. */
+import { gradeEn } from './grade';
 export const ja: Messages = {
+  ...gradeEn,
   'app.name': 'うさぎさんすう',
   'app.nameA': 'うさぎ',
   'app.nameB': 'さんすう',
